@@ -54,6 +54,7 @@ Clone the repository:
 ```bash
 git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
+---
 Installing Docker Desktop
 
 Set up Kafka:
