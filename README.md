@@ -32,7 +32,7 @@ Tweet ID: int
 Entity: string
 Sentiment: string (Target)
 Tweet content: string
-The validation database “twitter_validation.csv” contains 998 lines (Tweets) with the same features of “twitter_training.csv”.
+The validation database “twitter_validation.csv” 
 
 This is the Data Source: https://www.kaggle.com/datasets/jp797498e/twitter-entity-sentiment-analysis
 
@@ -55,7 +55,7 @@ Django
 Installation
 Clone the repository:
 
-git clone https://github.com/drisskhattabi6/Real-Time-Twitter-Sentiment-Analysis.git
+git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
 Installing Docker Desktop
 
@@ -76,8 +76,8 @@ Note : you will need MongoDB for Running the Kafka and Spark Streaming applicati
 
 Start MongoDB:
 using command line :
-sudo systemctl start mongod
-then use MongoDBCompass (Recommended).
+net start MongoDB
+then use MongoDBCompass
 Running the Kafka and Spark Streaming application :
 Change the directory to the application:
 
@@ -85,7 +85,7 @@ cd Kafka-PySpark
 Start Kafka in docker:
 
 using command line :
-docker exec -it <kafka-container-id> /bin/bash
+docker exec -it kafka1 /bin/bash
 or using docker desktop :
 
  docker desktop img
@@ -95,16 +95,16 @@ Run kafka Zookeeper and a Broker:
 kafka-topics --create --topic twitter --bootstrap-server localhost:9092
 kafka-topics --describe --topic twitter --bootstrap-server localhost:9092
 Run kafka provider app:
-
-py producer-validation-tweets.py
+1. Kaggle
+python producer-validation-tweets.py
 Run pyspark streaming (kafka consumer) app:
 
-py consumer-pyspark.py
-Running the Kafka and Spark Streaming application img
+python consumer-pyspark.py
 
-this is an img of the MongoDBCompass after Running the Kafka and Spark Streaming application :
+2.X
+python producer_x_search_to_mongo.py
 
-MongoDBCompass img
+
 
 Running Django Dashboard application :
 Change the directory to the application:
