@@ -1,3 +1,12 @@
+```bash
+.evn thay X_BEARER_TOKEN thanh key cua ban than
+tải hadoop va thay the bin cua hadoop trong github thanh cac file tương ứng
+khi chay code nhớ mở docker và mongodb
+```
+
+
+
+
 Big Data Project: Real-Time Twitter Sentiment Analysis Using Kafka, Spark (MLLib & Streaming), MongoDB and Django.
 Overview
 This repository contains a Big Data project focused on real-time sentiment analysis of Twitter data (classification of tweets). The project leverages various technologies to collect, process, analyze, and visualize sentiment data from tweets in real-time.
