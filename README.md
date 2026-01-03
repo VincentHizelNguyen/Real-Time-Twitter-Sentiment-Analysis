@@ -54,13 +54,15 @@ Clone the repository:
 ```bash
 git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
----
+```
 Installing Docker Desktop
 
 Set up Kafka:
 
 Download and install Apache Kafka in docker using :
+```bash
 docker-compose -f zk-single-kafka-single.yml up -d
+```
 Set up MongoDB:
 
 Download and install MongoDB.
@@ -68,60 +70,53 @@ It is recommended to install also MongoDBCompass to visualize data and makes wor
 Install Python dependencies:
 
 To install pySpark - PyMongo - Django ...
+```bash
 pip install -r requirements.txt
+```
 Running the Project
+
 Note : you will need MongoDB for Running the Kafka and Spark Streaming application and for Running Django Dashboard application.
 
 Start MongoDB:
 using command line :
+
+```bash
 net start MongoDB
+```
 then use MongoDBCompass
 Running the Kafka and Spark Streaming application :
 Change the directory to the application:
-
+```bash
 cd Kafka-PySpark
+```
 Start Kafka in docker:
 
 using command line :
+```bash
 docker exec -it kafka1 /bin/bash
+```
 or using docker desktop :
 
  docker desktop img
 
 Run kafka Zookeeper and a Broker:
-
+```bash
 kafka-topics --create --topic twitter --bootstrap-server localhost:9092
 kafka-topics --describe --topic twitter --bootstrap-server localhost:9092
+```
 Run kafka provider app:
 1. Kaggle
+```bash
 python producer-validation-tweets.py
+```
 Run pyspark streaming (kafka consumer) app:
-
+```bash
 python consumer-pyspark.py
+```
 
 2.X
+```bash
 python producer_x_search_to_mongo.py
+```
 
 
-
-Running Django Dashboard application :
-Change the directory to the application:
-
-cd Django-Dashboard
-Creating static folder:
-
-python manage.py collectstatic
-Run the Django server:
-
-python manage.py runserver
-Access the Dashboard: Open your web browser and go to http://127.0.0.1:8000 to view the real-time sentiment analysis dashboard.
-
-the Dashboard
-
-Running the Dashboard
-
-More informations :
-Django Dashboard get the data from MongoDb DataBase.
-the User can classify his owne text in http://127.0.0.1:8000/classify link.
-in the Dashboard, There is a table contains tweets with labels.
-in the Dashboard, There is 3 statistics or plots : labels rates - pie plot - bar plot.
