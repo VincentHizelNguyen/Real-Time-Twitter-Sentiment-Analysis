@@ -20,13 +20,10 @@ This is the project plan : project img
 Features
 Real-time Data Ingestion: Collects live tweets using Kafka from the Twitter DataSet.
 Stream Processing: Utilizes Spark Streaming to process and analyze the data in real-time.
-Sentiment Analysis: Classifies tweets into different sentiment categories (positive, negative, neutral) using natural language processing (NLP) techniques.
+Sentiment Analysis: Classifies tweets into different sentiment categories (positive, negative, neutral) 
 Data Storage: Stores the sentiment analysis results in MongoDB for persistence.
 Visualization: Provides a real-time dashboard built with Django to visualize the sentiment trends and insights.
 Data description:
-In This Project I'm using a Dataset (twitter_training.csv and twitter_validation.csv) to create pyspark Model and for create live tweets using Kafka. Each line of the "twitter_training.csv" learning database represents a Tweet, it contains over 74682 lines;
-
-The data types of Features are:
 
 Tweet ID: int
 Entity: string
@@ -34,7 +31,7 @@ Sentiment: string (Target)
 Tweet content: string
 The validation database “twitter_validation.csv” 
 
-This is the Data Source: https://www.kaggle.com/datasets/jp797498e/twitter-entity-sentiment-analysis
+This is the Data Source: https://drive.google.com/file/d/1dNefdXTS8OC7RqYwKhZDud5J5tLli3pf/view?usp=sharing
 
 Repository Structure
 Django-Dashboard : this folder contains Dashboard Django Application
@@ -54,7 +51,7 @@ MongoDB
 Django
 Installation
 Clone the repository:
-
+```bash
 git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
 Installing Docker Desktop
