@@ -2,6 +2,8 @@
 .evn thay X_BEARER_TOKEN thanh key cua ban than
 tải hadoop va thay the bin cua hadoop trong github thanh cac file tương ứng
 khi chay code nhớ mở docker và mongodb
+twitter_validation de o trong \Real-Time-Twitter-Sentiment-Analysis\Kafka-PySpark
+
 ```
 
 
