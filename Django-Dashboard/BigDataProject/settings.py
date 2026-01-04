@@ -80,3 +80,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MONGO_URI = "mongodb://localhost:27017/"
 MONGO_DB = "bigdata_project"
 MONGO_COL = "tweets_x"
+#MONGO_COL = "tweets_x"
+
