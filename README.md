@@ -6,14 +6,14 @@
   Real-Time-Twitter-Sentiment-Analysis/Kafka-PySpark
 ```
 
-#Overview
+# Overview
 
 This repository contains a Big Data project focused on real-time Twitter sentiment analysis.
 The system collects tweet data, processes it in real time, classifies sentiment, stores results, and visualizes them through a web dashboard.
 
 The project emphasizes streaming architecture and technology integration, not production optimization.
 
-#Project Architecture
+# Project Architecture
 
 The system is built using the following components:
 
@@ -31,49 +31,49 @@ Web framework for the real-time dashboard
 
 
 
-#Features
+# Features
 
-##Real-time Data Ingestion
+## Real-time Data Ingestion
 Tweets are streamed into Kafka from a dataset
 
-##Stream Processing
+## Stream Processing
 Spark Streaming processes incoming tweets in real time
 
-##Sentiment Analysis
+## Sentiment Analysis
 Tweets are classified into:
 
 Positive
 Negative
 Neutral
 
-##Data Storage
+## Data Storage
 Processed data is stored in MongoDB
 
-##Visualization
+## Visualization
 A Django dashboard displays sentiment trends in real time
 
-#Dataset
+# Dataset
 
 File: twitter.csv
 
 Source:
 https://drive.google.com/file/d/1dNefdXTS8OC7RqYwKhZDud5J5tLli3pf/view
 
-#Repository Structure
+#    Repository Structure
 Django-Dashboard : this folder contains Dashboard Django Application
 Kafka-PySpark : this folder contains kafka provider and pyspark streaming (kafka consumer).
 zk-single-kafka-single.yml : Download and install Apache Kafka in docker.
 
-#Getting Started
+# Getting Started
 
-##Installation
-###Clone the repository:
+## Installation
+### Clone the repository:
 ```bash
 git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
 ```
 
-###Install Docker Desktop according to your operating system.
+### Install Docker Desktop according to your operating system.
 
 
 Start Kafka and Zookeeper:
@@ -90,7 +90,7 @@ Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-##Running the Project
+## Running the Project
 
 Note: MongoDB is required for both Spark Streaming and the Django dashboard.
 
@@ -156,7 +156,7 @@ Access the dashboard at:
 http://127.0.0.1:8000
 ```
 
-##Final Notes
+## Final Notes
 
 Docker and MongoDB must be running before Spark
 
@@ -170,7 +170,7 @@ Wrong Spark / Kafka versions
 
 Incorrect Hadoop setup
 
-##Conclusion
+## Conclusion
 
 This project demonstrates:
 
