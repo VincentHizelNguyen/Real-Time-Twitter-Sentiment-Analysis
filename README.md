@@ -2,7 +2,7 @@
 - Replace X_BEARER_TOKEN in the .env file with your own Twitter API key
 - Download Hadoop and replace the Hadoop /bin files in the repository with the correct binaries
 - Make sure Docker and MongoDB are running before executing any code
-- Place twitter_validation.csv inside:
+- Place twitter.csv inside:
   Real-Time-Twitter-Sentiment-Analysis/Kafka-PySpark
 ```
 
