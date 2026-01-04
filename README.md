@@ -60,7 +60,7 @@ A Django dashboard displays sentiment trends in real time
 File: twitter.csv
 
 Source:
-https://drive.google.com/file/d/1dNefdXTS8OC7RqYwKhZDud5J5tLli3pf/view
+[Data](https://drive.google.com/file/d/1dNefdXTS8OC7RqYwKhZDud5J5tLli3pf/view)
 
 #    Repository Structure
 Django-Dashboard : this folder contains Dashboard Django Application
