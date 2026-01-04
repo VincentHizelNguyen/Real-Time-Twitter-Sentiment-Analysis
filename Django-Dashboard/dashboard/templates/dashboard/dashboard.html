@@ -1,0 +1,151 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sentiment Dashboard</title>
+  <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Auto refresh (tuỳ chọn): 30s -->
+  <!-- <meta http-equiv="refresh" content="30"> -->
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <h1>Twitter Sentiment Dashboard</h1>
+        <p class="muted">Last updated: {{ now }}</p>
+      </div>
+      <div class="badge">MongoDB → Django → Chart.js</div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-title">Total tweets</div>
+        <div class="kpi-value">{{ total }}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Positive</div>
+        <div class="kpi-value">{{ pos }}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Negative</div>
+        <div class="kpi-value">{{ neg }}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Neutral</div>
+        <div class="kpi-value">{{ neu }}</div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <div class="card-title">Sentiment Distribution</div>
+        <canvas id="pieChart" height="140"></canvas>
+        {% if other|default:0 %}
+          <p class="muted small">Note: {{ other }} records have unknown sentiment.</p>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tweets per Day (last 14 days)</div>
+
+        {% if day_labels and day_counts %}
+          <canvas id="lineChart" height="140"></canvas>
+        {% else %}
+          <p class="muted">No time-series available. Ensure <code>created_at</code> is stored as <b>datetime</b>.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Latest Tweets</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 140px;">Time</th>
+              <th style="width: 140px;">User</th>
+              <th style="width: 120px;">Sentiment</th>
+              <th>Text</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in latest %}
+              <tr>
+                <td class="mono">{{ t.created_at|default:"-" }}</td>
+                <td>{{ t.username|default:"-" }}</td>
+                <td>
+                <span class="pill pill-{{ t.sentiment|lower }}">
+                  {{ t.sentiment }}
+                </span>
+
+
+                </td>
+                <td>{{ t.text }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="4" class="muted">No data found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer muted">
+      <span>Traditional dashboard: simple, readable, defendable.</span>
+    </footer>
+  </div>
+
+<script>
+  // Pie
+  const pieCtx = document.getElementById('pieChart');
+  new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Positive', 'Negative', 'Neutral', 'Other'],
+      datasets: [{
+        data: [{{ pos }}, {{ neg }}, {{ neu }}, {{ other }}]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+
+  // Line
+  {% if day_labels and day_counts %}
+  const lineCtx = document.getElementById('lineChart');
+  new Chart(lineCtx, {
+    type: 'line',
+    data: {
+      labels: {{ day_labels|safe }},
+      datasets: [{
+        label: 'Tweets',
+        data: {{ day_counts|safe }},
+        tension: 0.25
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+  {% endif %}
+</script>
+
+</body>
+</html>
