@@ -134,7 +134,7 @@ consumer_spark.py
 
 2.X(Tweets real time)
 ```bash
-producer_x.py
+python producer_x.py
 ```
 Run pyspark streaming (kafka consumer) app:
 ```bash
