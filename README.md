@@ -67,7 +67,7 @@ zk-single-kafka-single.yml : Download and install Apache Kafka in docker.
 # Getting Started
 
 ## Installation
-### Clone the repository:
+Clone the repository:
 ```bash
 git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
