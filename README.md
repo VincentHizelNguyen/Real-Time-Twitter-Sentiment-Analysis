@@ -1,92 +1,98 @@
 ```bash
-.evn thay X_BEARER_TOKEN thanh key cua ban than
-tải hadoop va thay the bin cua hadoop trong github thanh cac file tương ứng
-khi chay code nhớ mở docker và mongodb
-twitter_validation de o trong \Real-Time-Twitter-Sentiment-Analysis\Kafka-PySpark
-
+- Replace X_BEARER_TOKEN in the .env file with your own Twitter API key
+- Download Hadoop and replace the Hadoop /bin files in the repository with the correct binaries
+- Make sure Docker and MongoDB are running before executing any code
+- Place twitter_validation.csv inside:
+  Real-Time-Twitter-Sentiment-Analysis/Kafka-PySpark
 ```
 
+#Overview
+
+This repository contains a Big Data project focused on real-time Twitter sentiment analysis.
+The system collects tweet data, processes it in real time, classifies sentiment, stores results, and visualizes them through a web dashboard.
+
+The project emphasizes streaming architecture and technology integration, not production optimization.
+
+#Project Architecture
+
+The system is built using the following components:
+
+Apache Kafka
+Real-time data ingestion from the Twitter dataset
+
+Spark Streaming 
+Stream processing and sentiment classification
+
+MongoDB
+Storage for processed sentiment results
+
+Django
+Web framework for the real-time dashboard
 
 
 
-Big Data Project: Real-Time Twitter Sentiment Analysis Using Kafka, Spark (MLLib & Streaming), MongoDB and Django.
-Overview
-This repository contains a Big Data project focused on real-time sentiment analysis of Twitter data (classification of tweets). The project leverages various technologies to collect, process, analyze, and visualize sentiment data from tweets in real-time.
+#Features
 
-Project Architecture
-The project is built using the following components:
+##Real-time Data Ingestion
+Tweets are streamed into Kafka from a dataset
 
-Apache Kafka: Used for real-time data ingestion from Twitter DataSet.
+##Stream Processing
+Spark Streaming processes incoming tweets in real time
 
-Spark Streaming: Processes the streaming data from Kafka to perform sentiment analysis.
+##Sentiment Analysis
+Tweets are classified into:
 
-MongoDB: Stores the processed sentiment data.
+Positive
+Negative
+Neutral
 
-Django: Serves as the web framework for building a real-time dashboard to visualize the sentiment analysis results.
+##Data Storage
+Processed data is stored in MongoDB
 
-chart.js & matplotlib : for plotting.
+##Visualization
+A Django dashboard displays sentiment trends in real time
 
-This is the project plan : project img
+#Dataset
 
-Features
-Real-time Data Ingestion: Collects live tweets using Kafka from the Twitter DataSet.
-Stream Processing: Utilizes Spark Streaming to process and analyze the data in real-time.
-Sentiment Analysis: Classifies tweets into different sentiment categories (positive, negative, neutral) 
-Data Storage: Stores the sentiment analysis results in MongoDB for persistence.
-Visualization: Provides a real-time dashboard built with Django to visualize the sentiment trends and insights.
-Data description:
+File: twitter.csv
 
-Tweet ID: int
-Entity: string
-Sentiment: string (Target)
-Tweet content: string
-The validation database “twitter_validation.csv” 
+Source:
+https://drive.google.com/file/d/1dNefdXTS8OC7RqYwKhZDud5J5tLli3pf/view
 
-This is the Data Source: https://drive.google.com/file/d/1dNefdXTS8OC7RqYwKhZDud5J5tLli3pf/view?usp=sharing
-
-Repository Structure
+#Repository Structure
 Django-Dashboard : this folder contains Dashboard Django Application
 Kafka-PySpark : this folder contains kafka provider and pyspark streaming (kafka consumer).
-ML PySpark Model : this folder contains the trained model with jupyter notebook and datasets.
 zk-single-kafka-single.yml : Download and install Apache Kafka in docker.
-bigdataproject rapport : a brief report about the project (in french).
-Getting Started
-Prerequisites
-To run this project, you will need the following installed on your system:
 
-Docker (for runing Kafka)
-Python 3.x
-Apache Kafka
-Apache Spark (PySpark for python)
-MongoDB
-Django
-Installation
-Clone the repository:
+#Getting Started
+
+##Installation
+###Clone the repository:
 ```bash
 git clone https://github.com/VincentHizelNguyen/Real-Time-Twitter-Sentiment-Analysis.git
 cd Real-Time-Twitter-Sentiment-Analysis
 ```
-Installing Docker Desktop
 
-Set up Kafka:
+###Install Docker Desktop according to your operating system.
 
-Download and install Apache Kafka in docker using :
+
+Start Kafka and Zookeeper:
+
 ```bash
 docker-compose -f zk-single-kafka-single.yml up -d
 ```
-Set up MongoDB:
+MongoDB Setup
 
-Download and install MongoDB.
-It is recommended to install also MongoDBCompass to visualize data and makes working with mongodb easier.
+Install MongoDB.
+MongoDB Compass is recommended for data inspection.
+
 Install Python dependencies:
-
-To install pySpark - PyMongo - Django ...
 ```bash
 pip install -r requirements.txt
 ```
-Running the Project
+##Running the Project
 
-Note : you will need MongoDB for Running the Kafka and Spark Streaming application and for Running Django Dashboard application.
+Note: MongoDB is required for both Spark Streaming and the Django dashboard.
 
 Start MongoDB:
 using command line :
@@ -94,40 +100,84 @@ using command line :
 ```bash
 net start MongoDB
 ```
-then use MongoDBCompass
-Running the Kafka and Spark Streaming application :
-Change the directory to the application:
+Then open MongoDB Compass.
+
+Run Kafka and Spark Streaming
+
+Change directory:
 ```bash
 cd Kafka-PySpark
 ```
-Start Kafka in docker:
+Run kafka Zookeeper and a Broker:
 
 using command line :
 ```bash
 docker exec -it kafka1 /bin/bash
 ```
-or using docker desktop :
+or using docker desktop 
 
- docker desktop img
-
-Run kafka Zookeeper and a Broker:
 ```bash
 kafka-topics --create --topic twitter --bootstrap-server localhost:9092
 kafka-topics --describe --topic twitter --bootstrap-server localhost:9092
 ```
-Run kafka provider app:
+Run Kafka Producer
 1. Kaggle
 ```bash
 python producer-validation-tweets.py
 ```
 Run pyspark streaming (kafka consumer) app:
 ```bash
-python consumer-pyspark.py
+spark-submit ^
+--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 ^
+consumer_spark.py
 ```
 
-2.X
+2.X(Tweets real time)
 ```bash
-python producer_x_search_to_mongo.py
+producer_x.py
+```
+Run pyspark streaming (kafka consumer) app:
+```bash
+spark-submit ^
+--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 ^
+sparkconsumer_x.py
 ```
 
 
+Django Dashboard
+```bash
+cd Django-Dashboard
+python manage.py runserver
+```
+
+
+Access the dashboard at:
+```bash
+http://127.0.0.1:8000
+```
+
+##Final Notes
+
+Docker and MongoDB must be running before Spark
+
+Windows users must configure Hadoop correctly
+
+Most runtime errors come from:
+
+Missing Spark Kafka packages
+
+Wrong Spark / Kafka versions
+
+Incorrect Hadoop setup
+
+##Conclusion
+
+This project demonstrates:
+
+Real-time Big Data streaming architecture
+
+Kafka–Spark–MongoDB integration
+
+Practical sentiment analysis on streaming data
+
+If the pipeline runs end-to-end, the core Big Data concepts are correctly implemented.
