@@ -21,7 +21,6 @@ if not BEARER:
 
 client = tweepy.Client(bearer_token=BEARER, wait_on_rate_limit=True)
 
-# ✅ BỎ api_version để client tự negotiate với broker (đỡ lỗi đổi version)
 producer = KafkaProducer(
     bootstrap_servers=KAFKA_BOOTSTRAP,
     value_serializer=lambda v: json.dumps(v, ensure_ascii=False).encode("utf-8"),
@@ -33,7 +32,6 @@ def _utc_now_iso() -> str:
 def tweet_to_msg(t) -> dict:
     pm = t.public_metrics or {}
 
-    # ✅ created_at không được None -> fallback now UTC để Spark parse event_time
     created_at = t.created_at.isoformat() if getattr(t, "created_at", None) else _utc_now_iso()
 
     return {
@@ -56,9 +54,6 @@ def tweet_to_msg(t) -> dict:
 
 def run(poll_seconds: float = POLL_SECONDS, batch_size: int = BATCH_SIZE):
     next_token = None
-
-    # ✅ since_id kiểu truyền thống: chỉ lấy tweet mới hơn (giảm trùng + sạch dữ liệu)
-    # Lưu trong RAM; muốn bền qua restart thì ghi ra file.
     last_seen_id = None
 
     print(f"[X Producer] bootstrap={KAFKA_BOOTSTRAP} topic={TOPIC}")
@@ -71,7 +66,6 @@ def run(poll_seconds: float = POLL_SECONDS, batch_size: int = BATCH_SIZE):
     while True:
         try:
             # Một số version Tweepy/support có since_id, một số không.
-            # Tao thử dùng since_id trước; nếu lỗi thì fallback cách filter id.
             kwargs = dict(
                 query=QUERY,
                 max_results=batch_size,
@@ -79,12 +73,11 @@ def run(poll_seconds: float = POLL_SECONDS, batch_size: int = BATCH_SIZE):
                 tweet_fields=["created_at", "lang", "public_metrics", "author_id", "conversation_id"],
             )
             if last_seen_id is not None:
-                kwargs["since_id"] = last_seen_id  # nếu API không support sẽ throw TypeError/HTTP error
+                kwargs["since_id"] = last_seen_id  
 
             resp = client.search_recent_tweets(**kwargs)
 
         except TypeError:
-            # ✅ Fallback: Tweepy version không nhận since_id param
             resp = client.search_recent_tweets(
                 query=QUERY,
                 max_results=batch_size,
@@ -96,7 +89,6 @@ def run(poll_seconds: float = POLL_SECONDS, batch_size: int = BATCH_SIZE):
         meta = resp.meta or {}
         next_token = meta.get("next_token")
 
-        # Nếu không dùng since_id được: filter thủ công theo last_seen_id (string compare id là OK vì tweet id tăng dần)
         for t in tweets:
             tid = str(t.id)
 
@@ -106,7 +98,6 @@ def run(poll_seconds: float = POLL_SECONDS, batch_size: int = BATCH_SIZE):
                         skipped += 1
                         continue
                 except Exception:
-                    # nếu lỡ parse int fail thì bỏ qua filter
                     pass
 
             producer.send(TOPIC, tweet_to_msg(t))
@@ -135,3 +126,4 @@ def run(poll_seconds: float = POLL_SECONDS, batch_size: int = BATCH_SIZE):
 
 if __name__ == "__main__":
     run()
+
