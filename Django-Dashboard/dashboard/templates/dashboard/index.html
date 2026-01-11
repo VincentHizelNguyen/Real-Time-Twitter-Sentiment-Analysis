@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Real-Time Sentiment Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 18px; }
+    h2 { margin: 0 0 12px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin: 8px 0 16px; }
+    select, input { padding:6px 8px; }
+    button { padding:6px 10px; cursor:pointer; }
+
+    .grid { display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; }
+    .card { border:1px solid #ddd; border-radius:10px; padding:12px; background:#fff; }
+    .span-3 { grid-column: span 3; }
+    .span-6 { grid-column: span 6; }
+    .span-12 { grid-column: span 12; }
+
+    .kpi { font-size: 26px; font-weight: 700; margin-top: 6px; }
+    .muted { color:#666; font-size: 12px; }
+    .tag { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #ddd; font-size: 12px; margin-right: 6px; }
+
+    .chart-wrap { position: relative; height: 320px; }  /* FIX: khóa chiều cao */
+    canvas { display:block; width:100% !important; height:100% !important; } /* FIX: tránh co giãn bậy */
+
+    table { width:100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
+    th, td { border-bottom:1px solid #eee; padding: 8px; vertical-align: top; word-wrap: break-word; }
+    th { text-align:left; }
+    .col-time { width: 160px; }
+    .col-label { width: 90px; }
+    .col-src { width: 140px; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .span-3 { grid-column: span 6; }
+      .span-6 { grid-column: span 12; }
+    }
+  </style>
+</head>
+<body>
+
+<h2>Real-Time Sentiment Dashboard</h2>
+
+<div class="controls">
+  <label>Last (minutes):
+    <input id="minutes" type="number" value="60" min="1" max="1440">
+  </label>
+
+  <label>Label:
+    <select id="label">
+      <option value="all">all</option>
+      <option value="positive">positive</option>
+      <option value="negative">negative</option>
+      <option value="neutral">neutral</option>
+    </select>
+  </label>
+
+  <label>Source:
+    <select id="source">
+      <option value="all">all</option>
+    </select>
+  </label>
+
+  <button id="refresh" type="button">Refresh</button>
+  <span class="muted" id="status"></span>
+</div>
+
+<div class="grid">
+  <div class="card span-3">
+    <div class="muted">Total docs (Mongo)</div>
+    <div class="kpi" id="kpiTotal">-</div>
+  </div>
+
+  <div class="card span-3">
+    <div class="muted">Docs in last N minutes</div>
+    <div class="kpi" id="kpiRecent">-</div>
+  </div>
+
+  <div class="card span-6">
+    <div class="muted">Positive / Negative / Neutral</div>
+    <div style="margin-top:10px;">
+      <span class="tag">pos: <b id="kpiPos">-</b></span>
+      <span class="tag">neg: <b id="kpiNeg">-</b></span>
+      <span class="tag">neu: <b id="kpiNeu">-</b></span>
+    </div>
+  </div>
+
+  <div class="card span-6">
+    <div><b>Sentiment over time</b> <span class="muted">(from sentiment_agg)</span></div>
+    <div class="chart-wrap">
+      <canvas id="chartLine"></canvas>
+    </div>
+  </div>
+
+  <div class="card span-6">
+    <div><b>Source breakdown</b> <span class="muted">(last N minutes)</span></div>
+    <div class="chart-wrap">
+      <canvas id="chartSource"></canvas>
+    </div>
+  </div>
+
+  <div class="card span-12">
+    <div><b>Latest tweets</b> <span class="muted">(from tweets_labeled)</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th class="col-time">time</th>
+          <th class="col-label">label</th>
+          <th class="col-src">source/region</th>
+          <th>text</th>
+        </tr>
+      </thead>
+      <tbody id="latestBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="/static/dashboard/main.js"></script>
+</body>
+</html>
